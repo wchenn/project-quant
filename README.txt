@@ -3,10 +3,12 @@
 Will Chen | https://www.linkedin.com/in/william-chen-5456261a9/ | asdooasnf.com/asdf2
 
 ## Overview
-[Your existing intro paragraph — keep as-is, it's good]
+This project is a backtesting engine that tests a simple moving-average crossover trading strategy (20/100 MA) against several stocks (AAPL, MSFT, SPY, and others) from 2021–2026, comparing it to a simple buy-and-hold approach. 
+
 
 ## Key Finding
-[Your existing key finding paragraph — keep as-is]
+Across 6 tickers tested (01/01/2021 to 07/10/2026), a 20/100 moving-average crossover strategy (purchase when the shorter term mass average is > the long term mass average and sell/exit when the inverse is true) underperformed simple buy-and-hold on both raw return and Sharpe ratio for most stocks. Performance was also unstable across different time periods, suggesting the strategy lacks a durable edge.
+
 
 ## Methodology
 - Data: daily closing prices for AAPL, MSFT, SPY, META, AMZN, GOOGL, NFLX, TSLA, WMT, JPM (Jan 2021–July 2026), pulled via yfinance
