@@ -1,5 +1,6 @@
 import yfinance as yf
 import numpy as np
+import streamlit as st
 
 
 def get_data(tickers, start_date, end_date):
