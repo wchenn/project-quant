@@ -8,16 +8,15 @@ import pandas as pd
 st.set_page_config(
     page_title="Moving Average Crossover Backtest",
     page_icon="📈",
-    layout="wide",
-    initial_sidebar_state="expanded",
-    menu_items={
-        'Get Help': 'https://www.extremelycoolapp.com/help',
-        'Report a bug': "https://www.extremelycoolapp.com/bug",
-        'About': "# This is a header. This is an *extremely* cool app!"
-    }
+    layout="wide"
 )
 st.title("Moving Average Crossover Backtest")
-st.subheader('Data from 01-01-2021 to 07-10-2026')
+st.subheader('Intro')
+st.write("""Hi, I'm Will Chen. This project is a backtesting engine that tests a simple moving-average crossover trading strategy (20/100 MA) against several stocks (AAPL, MSFT, SPY, and others) from 2021–2026, comparing it to a simple buy-and-hold approach. I built this to deepen my understanding of quantitative finance and Python, evaluating the strategy using risk-adjusted metrics like Sharpe ratio and maximum drawdown, and testing whether results held up across different time periods.
+Key finding: the moving-average strategy generally underperformed simple buy-and-hold on both raw return and risk-adjusted return (Sharpe ratio) across most tickers tested. Its apparent edge was also unstable across different time periods — for example, one ticker's Sharpe ratio dropped from 0.59 in 2021–2023 to just 0.02 in 2024–2026 — suggesting the strategy's performance is highly sensitive to market conditions rather than reflecting a durable, repeatable pattern.
+Note: this analysis uses a fixed dataset (Jan 2021 to July 2026) rather than live-updating dates, so results are reproducible and won't drift over time.""")
+
+st.subheader("Data is from 01-01-2021 to 07-10-2026")
 
 
 
@@ -32,8 +31,7 @@ if tickers:
     sharpe_ratio, max_drawdown = calculate_metrics(strategy_returns)
     buyhold_sharpe, buyhold_drawdown = calculate_metrics(simple_returns)
 
-
-    st.write("Sharpe Ratio:")
+    st.subheader("Sharpe Ratio")
     st.write("Sharpe ratio is measure of risk-adjusted return or how much return did we get for each unit " \
     "of risk we took on? Risk is calculated as the standard deviation of returns." \
     "A high Sharpe ratio means you're being efficiently compensated for the risk you're exposed to." \
@@ -43,6 +41,8 @@ if tickers:
     st.caption("Rx represents the expected portfolio return, Rf represents the risk free rate of return, StdDev Rx = Standard deviation" \
     " of portfolio return/volatility")
     st.write(sharpe_ratio)
+    st.write('''We see above that META has the strongest Sharpe Ratio of the stocks selected. You would expect high rewards for every unit of volatility 
+             calculated by the Sharpe Formula.  While the worse one here is AMZN.  AMZN's negative Sharpe ratio indicates that the return is lower than the risk free rate (the investment lost money)''')
 
 
     plot_data = pd.DataFrame({"Ticker": sharpe_ratio.index, "Sharpe Ratio": sharpe_ratio.values})
@@ -51,12 +51,14 @@ if tickers:
     fig.update_traces(marker_size = 30)
     st.plotly_chart(fig)
     
-    st.write("Max Drawdown:")
-    st.write("How far below your peak are you right now. Largest percent drop from peak to trough negative a percentage drop is, the larger and more severe the price decline")
-    st.latex(r"\text{Drawdown} = \frac{\text{Peak Value} - \text{Trough Value}}{\text{Peak Value}} \times 100\%")
+    st.subheader("Max Drawdown")
+    # st.write("Max Drawdown:")
+    st.write("How far below your peak are you right now. Largest percent drop from peak to trough negative a percentage drop is, the larger and more severe the price decline" \
+    "Max Drawdown measures worst case hisorical loss.  This is typically used to evaluate an asset's downside risk and volatility")
+    st.latex(r"\text{Drawdown} = \frac{\text{Peak Value} - \text{Trough Value}}{\text{Peak Value}}")
     st.write(max_drawdown)
-    plot_data = pd.DataFrame({"Ticker": max_drawdown.index, "Sharpe Ratio": max_drawdown.values})
-    fig = px.scatter(plot_data, x="Ticker", y="Sharpe Ratio", color = "Ticker",  title="Max Drawdown")
+    plot_data = pd.DataFrame({"Ticker": max_drawdown.index, "Max Drawdown": max_drawdown.values})
+    fig = px.scatter(plot_data, x="Ticker", y="Max Drawdown", color = "Ticker",  title="Max Drawdown")
     fig.update_layout(font=dict(size=20))
     fig.update_traces(marker_size = 30)
     st.plotly_chart(fig)
@@ -69,7 +71,7 @@ if tickers:
     st.line_chart(cumulative_returns_pct, y_label= '%')
     st.write('Buy Hold Cumulative')
     st.line_chart(buyhold_cumulative_pct, y_label= '%')
-
+    st.subheader("Summary")
 
     table_data = pd.DataFrame({
         "Sharpe Ratio": sharpe_ratio,
