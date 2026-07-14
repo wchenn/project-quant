@@ -48,7 +48,7 @@ test_strategy_returns = strategy_returns.loc["2024-01-01":]
 
 train_sharpe, train_drawdown = calculate_metrics(train_strategy_returns)
 test_sharpe, test_drawdown = calculate_metrics(test_strategy_returns)
-
+ 
 print("Train Sharpe:", train_sharpe)
 print("Test Sharpe:", test_sharpe)
 print("Train Max Drawdown:", train_drawdown)
