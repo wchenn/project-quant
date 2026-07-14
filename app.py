@@ -1,5 +1,5 @@
 import streamlit as st
-from data import get_data, compute_signal, compute_strategy_returns, calculate_metrics
+from data import get_data, compute_signal, compute_strategy_returns, calculate_metrics, apply_transaction_costs
 import plotly.express as px
 import pandas as pd
 
@@ -8,7 +8,7 @@ import pandas as pd
 st.set_page_config(
     page_title="Moving Average Crossover Backtest",
     page_icon="📈",
-    layout="wide"
+    layout="centered"
 )
 st.title("Moving Average Crossover Backtest")
 st.subheader('Intro')
@@ -17,7 +17,7 @@ Key finding: the moving-average strategy generally underperformed simple buy-and
 Note: this analysis uses a fixed dataset (Jan 2021 to July 2026) rather than live-updating dates, so results are reproducible and won't drift over time.  The stack used for this project included: Python, Pandas, Numpy, Yahoo Finance API, Plotly and Streamlit""")
 
 st.info("""
-**TL;DR:** Across 10 tickers tested (01/01/2021 to 07/10/2026), a 20/100 moving-average crossover strategy (purchase when the shorter term mass average is > the long term mass average)
+Ultimately - Across 6 tickers tested (01/01/2021 to 07/10/2026), a 20/100 moving-average crossover strategy (purchase when the shorter term mass average is > the long term mass average and sell/exit when the inverse is true)
 underperformed simple buy-and-hold on both raw return and Sharpe ratio for most stocks. Performance was also unstable across different time periods, suggesting the strategy lacks a durable edge.
 """)
 
@@ -30,7 +30,11 @@ if tickers:
     close = get_data(tickers, str(start_date), str(end_date))
     position = compute_signal(close)
     strategy_returns, simple_returns = compute_strategy_returns(close, position)
+    strategy_returns_after_cost = apply_transaction_costs(position, strategy_returns)
+
+    sharpe_after_costs, drawdown_after_costs = calculate_metrics(strategy_returns_after_cost)
     sharpe_ratio, max_drawdown = calculate_metrics(strategy_returns)
+
     buyhold_sharpe, buyhold_drawdown = calculate_metrics(simple_returns)
 
     st.subheader("Sharpe Ratio")
@@ -40,11 +44,11 @@ if tickers:
     "A low Sharpe ratio means you're taking on risk without getting adequately paid for it. ")
     st.write("Sharpe Formula:")
     st.latex(r"\text{Sharpe Ratio} = \frac{R_x - R_f}{\text{StdDev } R_x}")
-    st.caption('<div style="text-align: center">Rx represents the expected portfolio return, Rf represents the risk free rate of return, StdDev Rx = Standard deviation" \
-    " of portfolio return/volatility</div>', unsafe_allow_html=True)
+    st.caption('<div style="text-align: center">Rx represents the expected portfolio return, Rf represents the risk free rate of return, StdDev Rx = Standard deviation \
+     of portfolio return/volatility</div>', unsafe_allow_html=True)
     st.write(sharpe_ratio)
-    st.write('''We see above that META has the strongest Sharpe Ratio of the stocks selected. You would expect high rewards for every unit of volatility 
-             calculated by the Sharpe Formula.  While the worse one here is AMZN.  AMZN's negative Sharpe ratio indicates that the return is lower than the risk free rate (the investment lost money)''')
+    st.write('''"AMZN's negative Sharpe ratio means its strategy's average daily return was negative — it lost money on average, rather than underperforming a specific benchmark 
+             rate. The opposite is true for META: its positive Sharpe ratio reflects a positive average daily return, and its comparatively high magnitude suggests that return was earned efficiently relative to the volatility involved."''')
 
 
     plot_data = pd.DataFrame({"Ticker": sharpe_ratio.index, "Sharpe Ratio": sharpe_ratio.values})
@@ -55,10 +59,10 @@ if tickers:
     
     st.subheader("Max Drawdown")
     # st.write("Max Drawdown:")
-    st.write("Max Drawdown measures worst case hisorical loss.  This is typically used to evaluate an asset's downside risk and volatility. In other words how far below the peak are you right now. " \
+    st.write("Max Drawdown measures worst case historical loss.  This is typically used to evaluate an asset's downside risk and volatility. In other words how far below the peak are you right now. " \
     "Largest percent drop from peak to trough negative a percentage drop is, the larger and more severe the price decline" \
     )
-    st.write("Example of a peak and a trough")
+
     df = pd.DataFrame ({'xdata' : [1, 2, 3, 4, 5, 6, 7], 'ydata' : [15,40, 89, 159, 23, -16, 20]})
     fig = px.line(df, x = 'xdata' , y = 'ydata', title ="Peak and Trough Example")
     fig.add_annotation(x = 4, y=159, text = "Peak")
@@ -67,7 +71,6 @@ if tickers:
 
 
     st.latex(r"\text{Drawdown} = \frac{\text{Peak Value} - \text{Trough Value}}{\text{Peak Value}}")
-    st.caption('<div style="text-align: center">Max Drawdown</div>', unsafe_allow_html=True)
 
     st.write(max_drawdown)
     plot_data = pd.DataFrame({"Ticker": max_drawdown.index, "Max Drawdown": max_drawdown.values})
@@ -88,12 +91,14 @@ if tickers:
 
     table_data = pd.DataFrame({
         "Strategy Sharpe": sharpe_ratio,
+        "Sharpe with Transaction Cost": sharpe_after_costs,
         "Buy-Hold Sharpe": buyhold_sharpe,
         "Strategy Return %": cumulative_returns_pct.iloc[-1],
         "Buy-Hold Return %": buyhold_cumulative_pct.iloc[-1],
         "Strategy Drawdown": max_drawdown,
         "Buy-Hold Drawdown": buyhold_drawdown
 })
+    st.caption('Transaction Costs of 10 bps (.001) to simulate transaction fees since we are selling when long MA>short MA in the strategy')
     st.write(table_data)
 
 

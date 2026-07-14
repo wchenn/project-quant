@@ -48,23 +48,22 @@ test_strategy_returns = strategy_returns.loc["2024-01-01":]
 
 train_sharpe, train_drawdown = calculate_metrics(train_strategy_returns)
 test_sharpe, test_drawdown = calculate_metrics(test_strategy_returns)
- 
-print("Train Sharpe:", train_sharpe)
-print("Test Sharpe:", test_sharpe)
-print("Train Max Drawdown:", train_drawdown)
-print("Test Max Drawdown:", test_drawdown) #testing to see if a pattern is consistent
+
+# print("Train Sharpe:", train_sharpe)
+# print("Test Sharpe:", test_sharpe)
+# print("Train Max Drawdown:", train_drawdown)
+# print("Test Max Drawdown:", test_drawdown) #testing to see if a pattern is consistent
 
 
-print("Strategy Returns after Cost", posttrans)
+# print("Strategy Returns after Cost", posttrans)
 
-print("Sharpe:", sharpe_ratio)
-print("Max Drawdown:", max_drawdown)
-buyhold_sharpe, buyhold_drawdown = calculate_metrics(simple_returns)
+# print("Sharpe:", sharpe_ratio)
+# print("Max Drawdown:", max_drawdown)
 
-print("Buy-Hold Sharpe:", buyhold_sharpe)
-print("Buy-Hold Max Drawdown:", buyhold_drawdown)
-print(strategy_returns.loc["2021-06-24"])
-print(posttrans.loc["2021-06-24"])
+# print("Buy-Hold Sharpe:", buyhold_sharpe)
+# print("Buy-Hold Max Drawdown:", buyhold_drawdown)
+# print(strategy_returns.loc["2021-06-24"])
+# print(posttrans.loc["2021-06-24"])
 
 
 
