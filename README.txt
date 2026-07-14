@@ -1,6 +1,6 @@
 # Moving Average Crossover Backtest
 
-Will Chen | https://www.linkedin.com/in/william-chen-5456261a9/ | asdooasnf.com/asdf2
+Will Chen | https://www.linkedin.com/in/william-chen-5456261a9/ | https://wchenbacktesting.streamlit.app/
 
 ## Overview
 This project is a backtesting engine that tests a simple moving-average crossover trading strategy (20/100 MA) against several stocks (AAPL, MSFT, SPY, and others) from 2021–2026, comparing it to a simple buy-and-hold approach. 
