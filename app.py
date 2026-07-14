@@ -47,8 +47,8 @@ if tickers:
     st.caption('<div style="text-align: center">Rx represents the expected portfolio return, Rf represents the risk free rate of return, StdDev Rx = Standard deviation \
      of portfolio return/volatility</div>', unsafe_allow_html=True)
     st.write(sharpe_ratio)
-    st.write('''"AMZN's negative Sharpe ratio means its strategy's average daily return was negative — it lost money on average, rather than underperforming a specific benchmark 
-             rate. The opposite is true for META: its positive Sharpe ratio reflects a positive average daily return, and its comparatively high magnitude suggests that return was earned efficiently relative to the volatility involved."''')
+    st.write('''AMZN's negative Sharpe ratio means its strategy's average daily return was negative — it lost money on average, rather than underperforming a specific benchmark 
+             rate. The opposite is true for META: its positive Sharpe ratio reflects a positive average daily return, and its comparatively high magnitude suggests that return was earned efficiently relative to the volatility involved.''')
 
 
     plot_data = pd.DataFrame({"Ticker": sharpe_ratio.index, "Sharpe Ratio": sharpe_ratio.values})
