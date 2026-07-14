@@ -1,6 +1,6 @@
 # Moving Average Crossover Backtest
 
-Will Chen | [your-email or LinkedIn] | [live app link, if deployed]
+Will Chen | https://www.linkedin.com/in/william-chen-5456261a9/ | asdooasnf.com/asdf2
 
 ## Overview
 [Your existing intro paragraph — keep as-is, it's good]
