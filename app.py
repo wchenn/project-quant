@@ -8,7 +8,7 @@ import pandas as pd
 st.set_page_config(
     page_title="Moving Average Crossover Backtest",
     page_icon="📈",
-    layout="centered"
+    layout="wide"
 )
 st.title("Moving Average Crossover Backtest")
 st.subheader('Intro')
