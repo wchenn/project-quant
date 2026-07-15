@@ -12,7 +12,7 @@ st.set_page_config(
 )
 st.title("Moving Average Crossover Backtest")
 st.subheader('Intro')
-st.write("""Hello, I'm Will. This project is a backtesting engine that tests a simple moving-average crossover trading strategy (20/100 MA) against several stocks (AAPL, MSFT, SPY, and others) from 2021–2026, comparing it to a simple buy-and-hold approach. I built this to deepen my understanding of quantitative finance and Python, evaluating the strategy using risk-adjusted metrics like Sharpe ratio and maximum drawdown, and testing whether results held up across different time periods.
+st.write("""Hello, I'm Will. This project is a backtesting engine that tests a simple moving-average crossover trading strategy (20/100 MA) against several stocks (AAPL, MSFT, AMZN, and others) from 2021–2026, comparing it to a simple buy-and-hold approach. I built this to deepen my understanding of quantitative finance and Python, evaluating the strategy using risk-adjusted metrics like Sharpe ratio and maximum drawdown, and testing whether results held up across different time periods.
 Key finding: the moving-average strategy generally underperformed simple buy-and-hold on both raw return and risk-adjusted return (Sharpe ratio) across most tickers tested. Its apparent edge was also unstable across different time periods — for example, one ticker's Sharpe ratio dropped from 0.59 in 2021–2023 to just 0.02 in 2024–2026 — suggesting the strategy's performance is highly sensitive to market conditions rather than reflecting a durable, repeatable pattern.
 Note: this analysis uses a fixed dataset (Jan 2021 to July 2026) rather than live-updating dates, so results are reproducible and won't drift over time.  The stack used for this project included: Python, Pandas, Numpy, Yahoo Finance API, Plotly and Streamlit""")
 
@@ -59,9 +59,10 @@ if tickers:
     
     st.subheader("Max Drawdown")
     # st.write("Max Drawdown:")
-    st.write("Max Drawdown measures worst case historical loss.  This is typically used to evaluate an asset's downside risk and volatility. In other words how far below the peak are you right now. " \
-    "Largest percent drop from peak to trough negative a percentage drop is, the larger and more severe the price decline" \
-    )
+    st.write("""Maximum Drawdown (Max DD) is the single largest "peak-to-trough" drop in a trading strategy's value before a new high is reached. It represents the worst-case historical loss you would have experienced if you invested at the top and sold at the bottom of that decline.""")
+
+    st.write("""Two strategies can earn similar returns while one experiences a much deeper decline along the way. Because of this, Max Drawdown can also be used to judge whether the profit earned was worth the historical stress required to achieve it — a concept closely related to the Calmar Ratio.""")
+
 
     df = pd.DataFrame ({'xdata' : [1, 2, 3, 4, 5, 6, 7], 'ydata' : [15,40, 89, 159, 23, -16, 20]})
     fig = px.line(df, x = 'xdata' , y = 'ydata', title ="Peak and Trough Example")
